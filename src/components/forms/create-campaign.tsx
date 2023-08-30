@@ -1,6 +1,13 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { TableData } from '../table/types';
 
-export default function CreateForm({ tabledata }) {
+interface CreateFormProps {
+    tabledata: Array<TableData>
+    open: boolean
+    setModal: Dispatch<SetStateAction<boolean>>
+}
+
+export default function CreateForm({ tabledata, open, setModal }: CreateFormProps) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [target, setTarget] = useState("");
@@ -11,14 +18,18 @@ export default function CreateForm({ tabledata }) {
             description: description,
             target: target,
             status: "Active"
-        })
-        console.log("table data", tabledata)
+        });
+        setTitle("");
+        setDescription("");
+        setTarget("");
+        console.log("tab data", tabledata)
+        setTimeout(() => setModal(!open), 1000);
     }
     return (
         <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+            <div className="flex min-h-full flex-1 flex-col justify-center lg:px-8">
+                <div className="my-3 sm:mx-auto sm:w-full sm:max-w-sm">
+                    <form className="space-y-6" method="POST">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Campaign Title
@@ -31,7 +42,7 @@ export default function CreateForm({ tabledata }) {
                                     autoComplete="title"
                                     onChange={(e) => setTitle(e.target.value)}
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -45,8 +56,9 @@ export default function CreateForm({ tabledata }) {
                                     id="about"
                                     name="about"
                                     onChange={(e) => setDescription(e.target.value)}
-                                    rows={3}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    rows={6}
+                                    required
+                                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     defaultValue={''}
                                 />
                             </div>
@@ -61,9 +73,10 @@ export default function CreateForm({ tabledata }) {
                                 <select
                                     id="target-group"
                                     name="target-group"
+                                    required
                                     onChange={(e) => setTarget(e.target.value)}
                                     autoComplete="target-group"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6"
                                 >
                                     <option>Select your target group</option>
                                     <option>All customers</option>
@@ -73,9 +86,10 @@ export default function CreateForm({ tabledata }) {
 
                         <div>
                             <button
-                                type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                type="button"
+                                className="flex w-full justify-center rounded-md bg-[#004741]  py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 onClick={() => createCampaign()}
+                                disabled={!title && !description && !target}
                             >
                                 Submit your comment
                             </button>
